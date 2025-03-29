@@ -28,19 +28,20 @@
         <ul class="side-nav">
 
             <li class="side-nav-item">
-                <a href="#" class="side-nav-link">
+                <a href="{{ route('admin.index') }}" class="side-nav-link">
                     <i class="ri-dashboard-3-line"></i>
                     <span> Dashboard </span>
                 </a>
             </li>
+
+            @can('manage categories')
             <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarPages" aria-expanded="false" aria-controls="sidebarPages"
-                    class="side-nav-link">
+                <a data-bs-toggle="collapse" href="#sidebarMaster" aria-expanded="false" aria-controls="sidebarMaster" class="side-nav-link">
                     <i class="ri-pages-line"></i>
                     <span> Master </span>
                     <span class="menu-arrow"></span>
                 </a>
-                <div class="collapse" id="sidebarPages">
+                <div class="collapse" id="sidebarMaster">
                     <ul class="side-nav-second-level">
                         <li>
                             <a href="{{ route('categories.index') }}">Category Master</a>
@@ -48,43 +49,67 @@
                     </ul>
                 </div>
             </li>
+            @endcan
 
-
-            {{-- <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarPages" aria-expanded="false" aria-controls="sidebarPages" class="side-nav-link">
+            @if (auth()->user()->can('manage permission') || auth()->user()->can('manage role'))
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarRolePermissions" aria-expanded="false" aria-controls="sidebarRolePermissions" class="side-nav-link">
                     <i class="ri-pages-line"></i>
-                    <span> Inventory </span>
+                    <span> Role & Permissions </span>
                     <span class="menu-arrow"></span>
                 </a>
-            </li> --}}
+                <div class="collapse" id="sidebarRolePermissions">
+                    <ul class="side-nav-third-level">
+                        @can(`manage role`)
+                            <li>
+                                <a href="{{ route('roles.index') }}">Roles Master</a>
+                            </li>
+                        @endcan
+                        @can(`manage permission`)
+                        <li>
+                            <a href="{{ route('permissions.index') }}">Permissions Master</a>
+                        </li>
+                        @endcan
+                    </ul>
+                </div>
+            </li>
+            @endif
 
+            @can('add service')
             <li class="side-nav-item">
                 <a href="#" class="side-nav-link">
                     <i class="ri-service-line"></i>
                     <span> Add Service </span>
                 </a>
             </li>
+            @endcan
 
+            @can('add photo')
             <li class="side-nav-item">
                 <a href="#" class="side-nav-link">
                     <i class="ri-gallery-line"></i>
                     <span> Add Photo </span>
                 </a>
             </li>
+            @endcan
 
+            @can('view enquiries')
             <li class="side-nav-item">
                 <a href="#" class="side-nav-link">
                     <i class="ri-dashboard-3-line"></i>
                     <span> Enquiries </span>
                 </a>
             </li>
+            @endcan
 
+            @can('view contact')
             <li class="side-nav-item">
                 <a href="#" class="side-nav-link">
                     {{-- <i class="ri-dashboard-3-line"></i> --}}
-                    <span> Contect Us </span>
+                    <span> Contact Us </span>
                 </a>
             </li>
+            @endcan
 
         </ul>
         <!--- End Sidemenu -->

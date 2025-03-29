@@ -8,45 +8,43 @@
 @endsection
 
 @section('content')
-    {{-- @include('admin.layouts.shared/page-title', ['sub_title' => 'Master', 'page_title' => 'Category']) --}}
-
-    <a href="{{ route('categories.create') }}" class="btn btn-primary mb-3">
-        <i class="fas fa-plus-circle"></i> Create New Category
+    {{-- @include('admin.layouts.shared/page-title', ['sub_title' => 'Roles', 'page_title' => 'roles']) --}}
+    <a href="{{ route('roles.create') }}" class="btn btn-primary mb-3">
+        <i class="fas fa-plus-circle"></i> Create New Role
     </a>
 
     <div class="row">
         <div class="col-12">
             <div class="card">
-                {{-- <div class="card-header">
-                    <h4 class="header-title">Categories Data Table</h4>
-                    <p class="text-muted mb-0">
-                        Below is the list of categories.
-                    </p>
-                </div> --}}
                 <div class="card-body">
                     <table id="basic-datatable" class="table table-striped dt-responsive nowrap w-100">
                         <thead>
                             <tr>
-                                <th>Category Type</th>
-                                <th>Category Name</th>
-                                <th>Sub Category</th>
-                                <th>Status</th>
+                                <th>Id</th>
+                                <th>Name</th>
+                                <th>Created At</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($categories as $category)
+                            @foreach ($roles as $role)
                                 <tr>
-                                    <td>{{ $category->category_type }}</td>
-                                    <td>{{ $category->category_name }}</td>
-                                    <td>{{ $category->sub_category }}</td>
-                                    <td>{{ $category->status ? 'Active' : 'Inactive' }}</td>
+                                    <td>{{ $role->id }}</td>
+                                    <td>{{ $role->name }}</td>
+                                    <td>{{ $role->created_at }}</td>
                                     <td>
-                                        <a href="{{ route('categories.edit', $category->id) }}" class="btn text-warning btn-sm"><i class="fas fa-pen-alt"></i></a>
-                                        <form action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display:inline;">
+                                        <a href="{{ route('roles.assignPermissions', $role->id) }}" class="btn text-success btn-sm" title="Assign Rights">
+                                            <i class="fas fa-check"></i>
+                                        </a>
+                                        <a href="{{ route('roles.edit', $role->id) }}" class="btn text-warning btn-sm" title="Edit">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </a>
+                                        <form action="{{ route('roles.destroy', $role->id) }}" method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn text-danger btn-sm" onclick="return confirm('Are you sure you want to delete this category?');"><i class="fas fa-trash-alt"></i></button>
+                                            <button type="submit" class="btn text-danger btn-sm" onclick="return confirm('Are you sure you want to delete this role?');" title="Delete">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
                                         </form>
                                     </td>
                                 </tr>
