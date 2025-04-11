@@ -4,8 +4,8 @@
     <!-- Brand Logo Light -->
     <a href="{{ url('/admin') }}" class="logo logo-light">
         <span class="logo-lgs">
-            {{-- <img src="{{ asset('web/images/logo_inline_lite_556x160.png') }}" alt="logo" style="width: 100%;"> --}}
-            <h3>Stock Management</h3>
+            <img src="{{ asset('images\no2.png') }}" alt="logo" style="width: 100%;">
+            {{-- <h3>Stock Management</h3> --}}
         </span>
         <span class="logo-sm">
             <img src="{{ asset('web/images/logo_inline_lite_556x160.png') }}" alt="small logo" style="width: 100%;">
@@ -15,10 +15,10 @@
     <!-- Brand Logo Dark -->
     <a href="{{ url('/admin') }}" class="logo logo-dark">
         <span class="logo-lg">
-            <img src="{{ asset('web/images/logo_inline_lite_556x160.png') }}" alt="dark logo" style="width: 100%;">
+            <img src="{{ asset('images/no-1.png') }}" alt="dark logo" style="width: 100%;">
         </span>
         <span class="logo-sm">
-            <img src="{{ asset('web/images/logo_inline_lite_556x160.png') }}" alt="small logo" style="width: 100%;">
+            <img src="{{ asset('images/no-1.png') }}" alt="small logo" style="width: 100%;">
         </span>
     </a>
 
@@ -45,6 +45,27 @@
                     <ul class="side-nav-second-level">
                         <li>
                             <a href="{{ route('categories.index') }}">Category Master</a>
+                        </li>
+                        @can(`manage items`)
+                        <li>
+                            <a href="{{ route('items.index') }}">Items Master</a>
+                        </li>
+                        @endcan
+                    </ul>
+                </div>
+            </li>
+            @endcan
+            @can('manage users')
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarUsers" aria-expanded="false" aria-controls="sidebarUsers" class="side-nav-link">
+                    <i class="ri-pages-line"></i>
+                    <span> Users </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarUsers">
+                    <ul class="side-nav-second-level">
+                        <li>
+                            <a href="{{ route('users.index') }}">List Users</a>
                         </li>
                     </ul>
                 </div>

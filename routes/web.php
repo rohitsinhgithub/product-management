@@ -3,9 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ItemMasterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\UsersController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -34,6 +36,16 @@ Route::middleware(['auth'])->group(function () {
     // Permission Routes
     Route::group(['middleware' => ['check.permission:manage permission']], function () {
         Route::resource('/admin/permissions', PermissionController::class);
+    });
+
+    // Users Routes
+    Route::group(['middleware' => ['check.permission:manage users']], function () {
+        Route::resource('/admin/users', UsersController::class);
+    });
+
+    // Users Routes
+    Route::group(['middleware' => ['check.permission:manage items']], function () {
+        Route::resource('/admin/items', ItemMasterController::class);
     });
 
     // Route::prefix('/admin')->controller(AdminController::class)->group(function () {

@@ -6,9 +6,9 @@
 @endsection
 
 @section('content')
-    @include('admin.layouts.shared/page-title', ['sub_title' => 'Category', 'page_title' => isset($category) ? 'Edit Category' : 'Create Category'])
+    {{-- @include('admin.layouts.shared/page-title', ['sub_title' => 'Category', 'page_title' => isset($category) ? 'Edit Category' : 'Create Category'])
 
-    <h1>{{ isset($category) ? 'Edit Category' : 'Create Category' }}</h1>
+    <h1>{{ isset($category) ? 'Edit Category' : 'Create Category' }}</h1> --}}
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -54,6 +54,7 @@
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary submit-btn">{{ isset($category) ? 'Update' : 'Save' }}</button>
+                        <a href="{{ route('categories.index') }}" class="btn btn-warning submit-btn">Back</a>
                     </form>
                 </div> <!-- end card-body -->
             </div> <!-- end card-->
