@@ -53,6 +53,7 @@
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary submit-btn">{{ isset($category) ? 'Update' : 'Save' }}</button>
+                        <a href="{{ route('categories.index') }}" class="btn btn-warning submit-btn">Back</a>
                     </form>
                 </div> <!-- end card-body -->
             </div> <!-- end card-->
