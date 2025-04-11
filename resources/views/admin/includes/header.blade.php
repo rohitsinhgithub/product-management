@@ -96,12 +96,12 @@
                                 </div>
 
                                 <!-- item-->
-                                <a href="#" class="dropdown-item">
+                                <a href="{{ route('admin.myProfile') }}" class="dropdown-item">
                                     <i class="ri-account-circle-line fs-18 align-middle me-1"></i>
                                     <span>My Account</span>
                                 </a>
-                                <a href="#" class="dropdown-item">
-                                    <i class="ri-account-circle-line fs-18 align-middle me-1"></i>
+                                <a href="{{ route('admin.myProfile') }}#change-password" class="dropdown-item">
+                                    <i class="ri-lock-line fs-18 align-middle me-1"></i>
                                     <span>Change Password</span>
                                 </a>
                                 <!-- item-->

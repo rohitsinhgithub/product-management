@@ -6,14 +6,13 @@
 @endsection
 
 @section('content')
-    @include('admin.layouts.shared/page-title', ['sub_title' => 'Roles', 'page_title' => isset($role) ? 'Edit Role' : 'Create Role'])
+    {{-- @include('admin.layouts.shared/page-title', ['sub_title' => 'Roles', 'page_title' => isset($role) ? 'Edit Role' : 'Create Role']) --}}
 
-    <h1>{{ isset($role) ? 'Edit Role' : 'Create Role' }}</h1>
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ isset($role) ? route('roles.update', $role->id) : route('roles.store') }}" 
+                    <form action="{{ isset($role) ? route('admin.roles.update', $role->id) : route('admin.roles.store') }}" 
                         method="POST" class="ajax-form-new-21">
                         @csrf
                         {{-- <input type="hidden" name="_token" value="{{ csrf_token() }}"> --}}
@@ -27,7 +26,7 @@
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary submit-btn">{{ isset($role) ? 'Update' : 'Save' }}</button>
-                        <a href="{{ route('roles.index') }}" class="btn btn-warning">Back</a>
+                        <a href="{{ route('admin.roles.index') }}" class="btn btn-warning">Back</a>
                     </form>
                 </div> <!-- end card-body -->
             </div> <!-- end card-->
@@ -67,7 +66,7 @@
                         });
                         form[0].reset(); // Reset form after success
                         setTimeout(function () {
-                    window.location.href = "{{ route('roles.index') }}"; // Update with your index route
+                    window.location.href = "{{ route('admin.roles.index') }}"; // Update with your index route
                 }, 2000);
                         submitButton.prop("disabled", false);
                     },

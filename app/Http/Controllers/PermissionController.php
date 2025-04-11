@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Exports\PermissionsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PermissionController extends Controller
 {
@@ -14,9 +16,34 @@ class PermissionController extends Controller
     // }
 
     // Display all permissions
-    public function index()
+    public function index(Request $request)
     {
-        $permissions = Permission::all();
+        $query = Permission::query();
+
+        // Apply filters
+        if ($request->has('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        if ($request->has('created_from')) {
+            $query->whereDate('created_at', '>=', $request->created_from);
+        }
+
+        if ($request->has('created_to')) {
+            $query->whereDate('created_at', '<=', $request->created_to);
+        }
+
+        // Apply sorting
+        $sortBy = $request->input('sort_by', 'created_at');
+        $order = $request->input('order', 'desc');
+        
+        if (in_array($sortBy, ['id', 'name', 'created_at'])) {
+            $query->orderBy($sortBy, $order);
+        }
+
+        // Get paginated results
+        $permissions = $query->paginate(10)->withQueryString();
+
         return view('admin.permissions.index', compact('permissions'));
     }
 
@@ -85,5 +112,19 @@ class PermissionController extends Controller
             'message' => 'Permission Delete successfully.',
             'redirect' => route('permissions.index')
         ]);
+    }
+
+    /**
+     * Export permissions to Excel or CSV
+     *
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function export(Request $request)
+    {
+        $type = $request->input('type', 'excel');
+        $fileName = 'permissions_' . date('Y-m-d') . ($type == 'csv' ? '.csv' : '.xlsx');
+
+        return Excel::download(new PermissionsExport, $fileName);
     }
 }

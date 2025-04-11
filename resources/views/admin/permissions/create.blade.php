@@ -6,14 +6,14 @@
 @endsection
 
 @section('content')
-    @include('admin.layouts.shared/page-title', ['sub_title' => 'Roles', 'page_title' => isset($permission) ? 'Edit Permission' : 'Create Permission'])
+    {{-- @include('admin.layouts.shared/page-title', ['sub_title' => 'Roles', 'page_title' => isset($permission) ? 'Edit Permission' : 'Create Permission']) --}}
 
-    <h1>{{ isset($permissio) ? 'Edit Permission' : 'Create Permission' }}</h1>
+    {{-- <h1>{{ isset($permissio) ? 'Edit Permission' : 'Create Permission' }}</h1> --}}
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ isset($permission) ? route('permissions.update', $permission->id) : route('permissions.store') }}" 
+                    <form action="{{ isset($permission) ? route('admin.permissions.update', $permission->id) : route('admin.permissions.store') }}" 
                         method="POST" class="ajax-form-new-21">
                         @csrf
                         {{-- <input type="hidden" name="_token" value="{{ csrf_token() }}"> --}}
@@ -27,7 +27,7 @@
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary submit-btn">{{ isset($permission) ? 'Update' : 'Save' }}</button>
-                        <a href="{{ route('permissions.index') }}" class="btn btn-warning submit-btn">Back</a>
+                        <a href="{{ route('admin.permissions.index') }}" class="btn btn-warning submit-btn">Back</a>
                     </form>
                 </div> <!-- end card-body -->
             </div> <!-- end card-->
@@ -67,7 +67,7 @@
                         });
                         form[0].reset(); // Reset form after success
                         setTimeout(function () {
-                    window.location.href = "{{ route('permissions.index') }}"; // Update with your index route
+                            window.location.href = "{{ route('admin.permissions.index') }}"; // Update with your index route
                 }, 2000);
                         submitButton.prop("disabled", false);
                     },

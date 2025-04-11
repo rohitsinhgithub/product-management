@@ -4,14 +4,26 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Spatie\Permission\Exceptions\UnauthorizedException;
+use Illuminate\Support\Facades\Auth;
 
 class PermissionMiddleware
 {
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @param  string  $permission
+     * @return mixed
+     */
     public function handle(Request $request, Closure $next, $permission)
     {
-        if (!$request->user() || !$request->user()->can($permission)) {
-            throw UnauthorizedException::forPermissions([$permission]);
+        if (Auth::guest()) {
+            return redirect()->route('login');
+        }
+
+        if (!Auth::user()->hasPermissionTo($permission)) {
+            abort(403, 'Unauthorized action.');
         }
 
         return $next($request);

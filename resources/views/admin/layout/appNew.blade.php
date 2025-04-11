@@ -30,7 +30,10 @@
 
     <!-- App css -->
     <link href="{{ asset('adminTheme/assetsNew/css/app.min.css') }}" rel="stylesheet" type="text/css" id="app-style" />
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropify/0.2.2/css/dropify.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropify/0.2.2/css/dropify.min.css">
+    <!-- Font Awesome CDN for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <!-- Icons css -->
     <link href="{{ asset('adminTheme/assetsNew/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('adminTheme/assetsNew/vendor/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />

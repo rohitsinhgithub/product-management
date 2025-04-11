@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Permission;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\RolesExport;
 
 class RoleController extends Controller
 {
@@ -16,10 +18,37 @@ class RoleController extends Controller
     //     $this->middleware('check.permission:manage role');
     // }
 
-    // Display all roles
-    public function index()
+    // Display all roles with filtering and sorting
+    public function index(Request $request)
     {
-        $roles = Role::all();
+        $query = Role::query();
+
+        // Apply filters
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+        if ($request->filled('created_from')) {
+            $query->whereDate('created_at', '>=', $request->created_from);
+        }
+        if ($request->filled('created_to')) {
+            $query->whereDate('created_at', '<=', $request->created_to);
+        }
+
+        // Apply sorting
+        $sortBy = $request->get('sort_by', 'created_at');
+        $order = $request->get('order', 'desc');
+
+        // Validate sort column to prevent SQL injection
+        $allowedSortColumns = ['id', 'name', 'created_at'];
+        if (!in_array($sortBy, $allowedSortColumns)) {
+            $sortBy = 'created_at';
+        }
+
+        $query->orderBy($sortBy, $order);
+
+        // Get paginated results
+        $roles = $query->paginate(15)->withQueryString();
+
         return view('admin.roles.index', compact('roles'));
     }
 
@@ -45,7 +74,7 @@ class RoleController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Role created successfully.',
-            'redirect' => route('roles.index')
+            'redirect' => route('admin.roles.index')
         ]); 
     }
 
@@ -53,7 +82,7 @@ class RoleController extends Controller
     public function edit($id)
     {
         $role = Role::findOrFail($id);
-        return view('admin.roles.create', compact('role')); // Reuse the create view for editing
+        return view('admin.roles.create', compact('role'));
     }
 
     // Update a role
@@ -66,15 +95,13 @@ class RoleController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-        
-        $role->name = $request->name;
-        $role->updated_at = now();
-        $role->save();  
-       
+
+        $role->update(['name' => $request->name]);
+
         return response()->json([
             'success' => true,
-            'message' => 'Role Updated successfully.',
-            'redirect' => route('roles.index')
+            'message' => 'Role updated successfully.',
+            'redirect' => route('admin.roles.index')
         ]); 
     }
 
@@ -85,43 +112,43 @@ class RoleController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Role Delete successfully.',
-            'redirect' => route('roles.index')
-        ]);
+            'message' => 'Role deleted successfully.',
+            'redirect' => route('admin.roles.index')
+        ]); 
     }
 
+    // Assign permissions to a role
     public function assignPermissions($roleId)
     {
         $role = Role::findOrFail($roleId);
         $permissions = Permission::all();
-        
-        // Get already assigned permissions for the role
         $assignedPermissions = $role->permissions->pluck('id')->toArray();
-
+        
         return view('admin.roles.assignpage', compact('role', 'permissions', 'assignedPermissions'));
     }
 
+    // Store assigned permissions
     public function storeAssignedPermissions(Request $request, $roleId)
     {
-        // Validate the incoming request data
-        $validated = $request->validate([
-            'permissions' => 'array|nullable',
-            'permissions.*' => 'exists:permissions,id',
-        ]);
-
-        // Find the role
         $role = Role::findOrFail($roleId);
+        $role->syncPermissions($request->permissions ?? []);
+        
+        return redirect()->route('admin.roles.assignPermissions', $roleId)->with('success', 'Permissions assigned successfully.');
+    }
 
-        // Sync the role's permissions with the submitted ones
-        if (isset($validated['permissions'])) {
-            // Detach any permissions that are not selected
-            $role->permissions()->sync($validated['permissions']);
-        } else {
-            // If no permissions are selected, we can detach all
-            $role->permissions()->sync([]);
+    /**
+     * Export roles based on filters
+     */
+    public function export(Request $request)
+    {
+        try {
+            $type = $request->get('type', 'excel');
+            $extension = $type === 'excel' ? 'xlsx' : 'csv';
+            $fileName = 'roles_' . date('Y-m-d_H-i-s') . '.' . $extension;
+            
+            return Excel::download(new RolesExport($request), $fileName);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to export roles: ' . $e->getMessage());
         }
-
-        // Redirect back with success message
-        return redirect()->route('roles.assignPermissions', $roleId)->with('success', 'Permissions assigned successfully.');
-    }   
+    }
 }

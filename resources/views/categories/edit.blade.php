@@ -7,7 +7,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('categories.store') }}" method="POST">
+                    <form action="{{ route('admin.categories.store') }}" method="POST">
                         @csrf
                         <div class="row g-2">
                             <div class="mb-3 col-md-6">

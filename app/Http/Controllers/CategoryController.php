@@ -4,17 +4,46 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Exports\CategoriesExport;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::all();
+        $query = Category::query();
+    
+        // Apply filters
+        if ($request->filled('category_type')) {
+            $query->where('category_type', 'like', '%' . $request->category_type . '%');
+        }
+        if ($request->filled('category_name')) {
+            $query->where('category_name', 'like', '%' . $request->category_name . '%');
+        }
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+    
+        // Apply sorting
+        $sortBy = $request->get('sort_by', 'created_at');
+        $order = $request->get('order', 'desc');
+        
+        // Validate sort column to prevent SQL injection
+        $allowedSortColumns = ['created_at', 'category_type', 'category_name', 'status'];
+        if (!in_array($sortBy, $allowedSortColumns)) {
+            $sortBy = 'created_at';
+        }
+        
+        $query->orderBy($sortBy, $order);
+    
+        // Get paginated results with more items per page
+        $categories = $query->paginate(15)->withQueryString();
+    
         return view('categories.index', compact('categories'));
     }
 
@@ -60,7 +89,7 @@ class CategoryController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Category created successfully.',
-            'redirect' => route('categories.index')
+            'redirect' => route('admin.categories.index')
         ]);
     }
 
@@ -107,7 +136,7 @@ class CategoryController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Category updated successfully.',
-            'redirect' => route('categories.index')
+            'redirect' => route('admin.categories.index')
         ]);
     }
 
@@ -121,7 +150,23 @@ class CategoryController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Category Delete successfully.',
-            'redirect' => route('categories.index')
+            'redirect' => route('admin.categories.index')
         ]);
+    }
+
+    /**
+     * Export categories based on filters
+     */
+    public function export(Request $request)
+    {
+        try {
+            $type = $request->get('type', 'excel');
+            $extension = $type === 'excel' ? 'xlsx' : 'csv';
+            $fileName = 'categories_' . date('Y-m-d_H-i-s') . '.' . $extension;
+            
+            return Excel::download(new CategoriesExport($request), $fileName);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to export categories: ' . $e->getMessage());
+        }
     }
 }

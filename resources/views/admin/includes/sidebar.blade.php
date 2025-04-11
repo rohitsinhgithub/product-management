@@ -1,73 +1,66 @@
 <!-- ========== Left Sidebar Start ========== -->
 <div class="leftside-menu">
-
-    <!-- Brand Logo Light -->
-    <a href="{{ url('/admin') }}" class="logo logo-light">
-        <span class="logo-lgs">
-            {{-- <img src="{{ asset('web/images/logo_inline_lite_556x160.png') }}" alt="logo" style="width: 100%;"> --}}
-            <h3>Stock Management</h3>
-        </span>
-        <span class="logo-sm">
-            <img src="{{ asset('web/images/logo_inline_lite_556x160.png') }}" alt="small logo" style="width: 100%;">
-        </span>
-    </a>
-
-    <!-- Brand Logo Dark -->
-    <a href="{{ url('/admin') }}" class="logo logo-dark">
+    <!-- Brand Logo -->
+    <a href="{{ url('/admin') }}" class="logo">
         <span class="logo-lg">
-            <img src="{{ asset('web/images/logo_inline_lite_556x160.png') }}" alt="dark logo" style="width: 100%;">
+            <span style="color: #FFD700; font-size: 24px; font-weight: bold;">Flow</span> <span style="color: #87CEEB; font-size: 24px; font-weight: bold;">Masters</span>
         </span>
         <span class="logo-sm">
-            <img src="{{ asset('web/images/logo_inline_lite_556x160.png') }}" alt="small logo" style="width: 100%;">
+            <span style="font-weight: bold; font-size: 18px;"><span style="color: #FFD700;">F</span><span style="color: #87CEEB;">M</span></span>
         </span>
     </a>
 
-    <!-- Sidebar -left -->
+    <!-- Sidebar -->
     <div class="h-100" id="leftside-menu-container" data-simplebar>
-        <!--- Sidemenu -->
         <ul class="side-nav">
-
             <li class="side-nav-item">
-                <a href="{{ route('admin.index') }}" class="side-nav-link">
-                    <i class="ri-dashboard-3-line"></i>
-                    <span> Dashboard </span>
+                <a href="{{ route('admin.dashboard') }}" class="side-nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
                 </a>
             </li>
 
-            @can('manage categories')
+            @can('user.list')
             <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarMaster" aria-expanded="false" aria-controls="sidebarMaster" class="side-nav-link">
-                    <i class="ri-pages-line"></i>
-                    <span> Master </span>
-                    <span class="menu-arrow"></span>
+                <a href="{{ route('users.index') }}" class="side-nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
+                    <i class="fas fa-users"></i>
+                    <span>Users</span>
                 </a>
-                <div class="collapse" id="sidebarMaster">
-                    <ul class="side-nav-second-level">
-                        <li>
-                            <a href="{{ route('categories.index') }}">Category Master</a>
-                        </li>
-                    </ul>
-                </div>
             </li>
             @endcan
 
-            @if (auth()->user()->can('manage permission') || auth()->user()->can('manage role'))
+            @can('manage category')
             <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarRolePermissions" aria-expanded="false" aria-controls="sidebarRolePermissions" class="side-nav-link">
-                    <i class="ri-pages-line"></i>
-                    <span> Role & Permissions </span>
+                <a href="{{ route('admin.categories.index') }}" class="side-nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
+                    <i class="fas fa-layer-group"></i>
+                    <span>Categories</span>
+                </a>
+            </li>
+            @endcan
+
+            @if(auth()->user()->can('role.list') || auth()->user()->can('permission.list'))
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#settingsMenu" aria-expanded="false" aria-controls="settingsMenu" 
+                   class="side-nav-link">
+                    <i class="fas fa-cogs"></i>
+                    <span> Settings </span>
                     <span class="menu-arrow"></span>
                 </a>
-                <div class="collapse" id="sidebarRolePermissions">
-                    <ul class="side-nav-third-level">
-                        @can(`manage role`)
-                            <li>
-                                <a href="{{ route('roles.index') }}">Roles Master</a>
-                            </li>
-                        @endcan
-                        @can(`manage permission`)
+                <div class="collapse" id="settingsMenu">
+                    <ul class="side-nav-second-level">
+                        @can('role.list')
                         <li>
-                            <a href="{{ route('permissions.index') }}">Permissions Master</a>
+                            <a href="{{ route('admin.roles.index') }}" class="{{ request()->routeIs('admin.roles.*') ? 'active' : '' }}">
+                                <i class="fas fa-user-tag"></i> Roles
+                            </a>
+                        </li>
+                        @endcan
+
+                        @can('permission.list')
+                        <li>
+                            <a href="{{ route('admin.permissions.index') }}" class="{{ request()->routeIs('admin.permissions.*') ? 'active' : '' }}">
+                                <i class="fas fa-key"></i> Permissions
+                            </a>
                         </li>
                         @endcan
                     </ul>
@@ -75,47 +68,53 @@
             </li>
             @endif
 
-            @can('add service')
+            @can('service.add')
             <li class="side-nav-item">
-                <a href="#" class="side-nav-link">
-                    <i class="ri-service-line"></i>
-                    <span> Add Service </span>
-                </a>
+                {{-- <a href="{{ route('services.index') }}" class="side-nav-link">
+                    <i class="fas fa-cogs"></i>
+                    <span>Services</span>
+                </a> --}}
             </li>
             @endcan
 
-            @can('add photo')
+            @can('media.add')
             <li class="side-nav-item">
-                <a href="#" class="side-nav-link">
-                    <i class="ri-gallery-line"></i>
-                    <span> Add Photo </span>
-                </a>
+                {{-- <a href="{{ route('media.index') }}" class="side-nav-link">
+                    <i class="fas fa-images"></i>
+                    <span>Media</span>
+                </a> --}}
             </li>
             @endcan
 
-            @can('view enquiries')
+            @can('enquiry.view')
             <li class="side-nav-item">
-                <a href="#" class="side-nav-link">
-                    <i class="ri-dashboard-3-line"></i>
-                    <span> Enquiries </span>
-                </a>
+                {{-- <a href="{{ route('enquiries.index') }}" class="side-nav-link">
+                    <i class="fas fa-envelope"></i>
+                    <span>Enquiries</span>
+                </a> --}}
             </li>
             @endcan
 
-            @can('view contact')
+            @can('contact.view')
             <li class="side-nav-item">
-                <a href="#" class="side-nav-link">
-                    {{-- <i class="ri-dashboard-3-line"></i> --}}
-                    <span> Contact Us </span>
-                </a>
+                {{-- <a href="{{ route('contacts.index') }}" class="side-nav-link">
+                    <i class="fas fa-address-book"></i>
+                    <span>Contact</span>
+                </a> --}}
             </li>
             @endcan
 
+            @can('user.profile')
+            <li class="side-nav-item">
+                {{-- <a href="{{ route('admin.myProfile') }}" class="side-nav-link {{ request()->routeIs('admin.myProfile') ? 'active' : '' }}">
+                    <i class="fas fa-user"></i>
+                    <span>My Profile</span>
+                </a> --}}
+            </li>
+            @endcan
         </ul>
-        <!--- End Sidemenu -->
 
-        <div class=" clearfix">
-        </div>
+        <div class="clearfix"></div>
     </div>
 </div>
 <!-- ========== Left Sidebar End ========== -->

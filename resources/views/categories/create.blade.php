@@ -6,14 +6,13 @@
 @endsection
 
 @section('content')
-    @include('admin.layouts.shared/page-title', ['sub_title' => 'Category', 'page_title' => isset($category) ? 'Edit Category' : 'Create Category'])
+    {{-- @include('admin.layouts.shared/page-title', ['sub_title' => 'Category', 'page_title' => isset($category) ? 'Edit Category' : 'Create Category']) --}}
 
-    <h1>{{ isset($category) ? 'Edit Category' : 'Create Category' }}</h1>
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ isset($category) ? route('categories.update', $category->id) : route('categories.store') }}" 
+                    <form action="{{ isset($category) ? route('admin.categories.update', $category->id) : route('admin.categories.store') }}" 
                         method="POST" class="ajax-form-new-21">
                         @csrf
                         {{-- <input type="hidden" name="_token" value="{{ csrf_token() }}"> --}}
@@ -93,7 +92,7 @@
                         });
                         form[0].reset(); // Reset form after success
                         setTimeout(function () {
-                    window.location.href = "{{ route('categories.index') }}"; // Update with your index route
+                    window.location.href = "{{ route('admin.categories.index') }}"; // Update with your index route
                 }, 2000);
                         submitButton.prop("disabled", false);
                     },
