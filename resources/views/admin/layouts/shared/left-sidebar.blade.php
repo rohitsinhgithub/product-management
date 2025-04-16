@@ -33,7 +33,7 @@
                 </a>
             </li>
 
-            @can('user.list')
+           
             <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#sidebarUsers" aria-expanded="false" aria-controls="sidebarUsers" class="side-nav-link">
                     <i class="ri-user-settings-line"></i>
@@ -45,22 +45,22 @@
                         <li>
                             <a href="{{ route('users.index') }}">Users</a>
                         </li>
-                        @can('role.list')
+                       
                         <li>
                             <a href="{{ route('admin.roles.index') }}">Roles</a>
                         </li>
-                        @endcan
-                        @can('permission.list')
+                        
+                       
                         <li>
                             <a href="{{ route('admin.permissions.index') }}">Permissions</a>
                         </li>
-                        @endcan
+                        
                     </ul>
                 </div>
             </li>
-            @endcan
+            
 
-            @can('category.manage')
+           
             <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#sidebarCategories" aria-expanded="false" aria-controls="sidebarCategories" class="side-nav-link">
                     <i class="ri-folder-line"></i>
@@ -78,52 +78,52 @@
                     </ul>
                 </div>
             </li>
-            @endcan
+            
 
-            @can('service.add')
+           
             <li class="side-nav-item">
                 <a href="{{ route('services.index') }}" class="side-nav-link">
                     <i class="ri-customer-service-2-line"></i>
                     <span> Services </span>
                 </a>
             </li>
-            @endcan
+            
 
-            @can('media.add')
+           
             <li class="side-nav-item">
                 <a href="{{ route('media.index') }}" class="side-nav-link">
                     <i class="ri-image-2-line"></i>
                     <span> Media </span>
                 </a>
             </li>
-            @endcan
+            
 
-            @can('enquiry.view')
+           
             <li class="side-nav-item">
                 <a href="{{ route('enquiries.index') }}" class="side-nav-link">
                     <i class="ri-mail-line"></i>
                     <span> Enquiries </span>
                 </a>
             </li>
-            @endcan
+            
 
-            @can('contact.view')
+           
             <li class="side-nav-item">
                 <a href="{{ route('contacts.index') }}" class="side-nav-link">
                     <i class="ri-contacts-line"></i>
                     <span> Contact </span>
                 </a>
             </li>
-            @endcan
+            
 
-            @can('user.profile')
+           
             <li class="side-nav-item">
                 <a href="{{ route('users.profile') }}" class="side-nav-link">
                     <i class="ri-user-line"></i>
                     <span> My Profile </span>
                 </a>
             </li>
-            @endcan
+            
 
             <li class="side-nav-item">
                 <a href="{{ route('logout') }}" class="side-nav-link" 

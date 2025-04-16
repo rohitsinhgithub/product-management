@@ -15,38 +15,23 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // Create permissions
         $permissions = [
-            // Category management
             'category.manage',
             
-            // User management
             'user.list',
             'user.create',
             'user.edit',
             'user.delete',
             
-            // Role management
             'role.list',
             'role.create',
             'role.edit',
             'role.delete',
             
-            // Permission management
             'permission.list',
             'permission.create',
             'permission.edit',
             'permission.delete',
             
-            // Service management
-            'service.add',
-            
-            // Media management
-            'media.add',
-            
-            // Enquiry management
-            'enquiry.view',
-            
-            // Contact management
-            'contact.view',
         ];
 
         // Create or update permissions
@@ -57,14 +42,14 @@ class RolesAndPermissionsSeeder extends Seeder
         }
 
         // Create or update roles
+        $superadminRole = Role::findOrCreate('superadmin');
         $adminRole = Role::findOrCreate('admin');
         $managerRole = Role::findOrCreate('manager');
-        $userRole = Role::findOrCreate('user');
 
         // Sync permissions for roles
-        $adminRole->syncPermissions(Permission::all());
+        $superadminRole->syncPermissions(Permission::all());
 
-        $managerRole->syncPermissions([
+        $adminRole->syncPermissions([
             'category.manage',
             'user.list',
             'role.list',
@@ -75,7 +60,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'contact.view',
         ]);
 
-        $userRole->syncPermissions([
+        $managerRole->syncPermissions([
             'user.list',
             'enquiry.view',
             'contact.view',

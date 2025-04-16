@@ -12,7 +12,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ isset($category) ? route('admin.categories.update', $category->id) : route('admin.categories.store') }}" 
+                    <form action="{{ isset($category) ? route('a1xdmin.categories.update', $category->id) : route('admin.categories.store') }}" 
                         method="POST" class="ajax-form-new-21">
                         @csrf
                         {{-- <input type="hidden" name="_token" value="{{ csrf_token() }}"> --}}

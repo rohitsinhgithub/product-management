@@ -249,8 +249,7 @@
                                             <i class="fas fa-key"></i>
                                         </a>
                                         @endcan
-                                        
-                                        @if($user->id != auth()->user()->id && $user->id != 1)
+                                        @if(!collect($user->roles)->pluck('name')->contains('super admin') && $user->id != auth()->id())
                                             @can('user.delete')
                                             <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline;">
                                                 @csrf

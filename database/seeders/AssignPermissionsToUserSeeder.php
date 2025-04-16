@@ -14,13 +14,8 @@ class AssignPermissionsToUserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Get all permissions
         $permissions = Permission::all();
-        
-        // Find user with ID 3
         $user = User::find(1);
-        
-        // Assign all permissions to the user
         foreach ($permissions as $permission) {
             $user->givePermissionTo($permission->name);
         }

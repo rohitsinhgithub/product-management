@@ -14,10 +14,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Call our main roles and permissions seeder first
         $this->call(RolesAndPermissionsSeeder::class);
-        
-        // Create super admin user
         $user = User::updateOrCreate(
             ['email' => 'superadmin@example.com'],
             [
@@ -26,18 +23,9 @@ class DatabaseSeeder extends Seeder
             ]
         );
         
-        // Assign all permissions to super admin
-        if ($adminRole = Role::where('name', 'admin')->first()) {
+        if ($adminRole = Role::where('name', 'superadmin')->first()) {
             $user->assignRole($adminRole);
         }
-
-        // Create default permissions
-        $this->call(DefaultPermissionsSeeder::class);
-        
-        // Create user module permissions
-        $this->call(UserModulePermissionsSeeder::class);
-        
-        // Call the seeder to assign all permissions to user_id 3
         $this->call(AssignPermissionsToUserSeeder::class);
     }
 }
