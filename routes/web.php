@@ -8,6 +8,7 @@ use App\Http\Controllers\VendorController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\BranchController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserController;
 
@@ -66,6 +67,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/admin/items', ItemMasterController::class);
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('companies', CompanyController::class);
+        Route::resource('branches', BranchController::class);
     });
     Route::get('companies/export-excel', [CompanyController::class, 'exportExcel'])->name('admin.companies.export');
 

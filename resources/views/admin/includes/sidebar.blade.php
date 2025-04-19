@@ -26,7 +26,20 @@
                     <span>Users</span>
                 </a>
             </li>
-            
+
+            <li class="side-nav-item">
+                <a href="{{ route('admin.companies.index') }}" class="side-nav-link {{ request()->routeIs('admin.companies.*') ? 'active' : '' }}">
+                    <i class="fas fa-users"></i>
+                    <span>Company</span>
+                </a>
+            </li>
+
+            <li class="side-nav-item">
+                <a href="{{ route('admin.branches.index') }}" class="side-nav-link {{ request()->routeIs('admin.branches.*') ? 'active' : '' }}">
+                    <i class="fas fa-users"></i>
+                    <span>Branch</span>
+                </a>
+            </li>
 
             <li class="side-nav-item">
                 <a href="{{ route('admin.categories.index') }}" class="side-nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
